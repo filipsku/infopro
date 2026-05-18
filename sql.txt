@@ -1,0 +1,13 @@
+CREATE TABLE Account(
+	AID int PRIMARY KEY,
+    Username varchar(255),
+    Password varchar(255),
+    Email varchar(255)
+);
+
+CREATE TABLE Message(
+	MID int PRIMARY KEY,
+    Sender int,
+    Receiver int,
+    Message_text varchar(1000)
+);

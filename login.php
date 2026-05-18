@@ -1,3 +1,70 @@
+<?php
+session_start();
+?>
+
+<?php
+    // Start the connection
+    $server="localhost";
+	$user="root";
+	$pass="";
+	$db="db";
+    $conn=mysqli_connect($server,$user,$pass,$db);
+?>
+
+<?php
+    // Form Handling
+    if($_SERVER["REQUEST_METHOD"] != "POST") {
+
+        // Login handle
+        if($_POST['form_id'='login']{
+            // Find the user
+            $querry = $conn->query('SELECT password from account where username = $_POST['username']');
+            // get the result user password
+            if($querry->num_rows > 0) {
+                $userpass = $querry->fetch_assoc();
+                if($userpass['password'] == $_POST['password']) {
+                    // if the password is correct, log the user in
+                    $_SESSION['username'] = $_POST['username'];
+                    header("Location: mainpage.php");
+                } else {
+                    // if the password is incorrect, show an error message
+                    echo "Incorrect password";
+                }
+            } else {
+                $userpass = false;
+                echo "No such username exists";
+            }
+            $querry->close();
+        }
+
+        // Register handle
+        elseif($_POST['form_id'='register']{
+            // Check if the username already exists
+            $querry = $conn->query('SELECT username from account where username = $_POST['username']');
+            if($querry->num_rows > 0) {
+                echo "Username already exists";
+            } else {
+                // If the username does not exist, create a new account
+                // Trim user inputs to prevent injection
+                $username = trim($_POST['username']);
+                $password = trim($_POST['password']);
+                $email = trim($_POST['email']);
+
+                // Creates new SQL account entry
+                $querry = $conn->query('INSERT INTO account (username, password, email) VALUES (?, ?, ?)');
+                $querry->bind_param("sss", $username, $password, $email);
+                if($querry) {
+                    echo "<a href="mainpage.php">Account created successfully</a>";
+                } else {
+                    echo "Error creating account: " . $conn->error;
+                }
+            }
+            querry->close();
+        }
+    }
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -52,7 +119,9 @@ span.psw {
 </head>
 
 <h3>Register</h3>
-<form action="register.php" method="post">
+<form action="" method="post">
+
+ <input type="hidden" name="form_id" value="register">
 
   <div class="container">
     <label for="username"><b>Username</b></label>
@@ -69,7 +138,9 @@ span.psw {
 </form>
 <br>
 <h3>Login</h3>
-<form action="log.php" method="post">
+<form action="" method="post">
+
+  <input type="hidden" name="form_id" value="login">
 
   <div class="container">
     <label for="username"><b>Username</b></label>
@@ -81,3 +152,4 @@ span.psw {
     <button type="submit">Login</button>
   </div>
 </form>
+</html>
