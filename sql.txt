@@ -1,13 +1,14 @@
 CREATE TABLE Account(
-	AID int PRIMARY KEY,
+	AID int AUTO_INCREMENT PRIMARY KEY,
     Username varchar(255),
     Password varchar(255),
     Email varchar(255)
 );
 
 CREATE TABLE Message(
-	MID int PRIMARY KEY,
+	MID int AUTO_INCREMENT PRIMARY KEY,
     Sender int,
     Receiver int,
+	ReceiverName varchar(255)
     Message_text varchar(1000)
 );
