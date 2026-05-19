@@ -11,10 +11,10 @@ session_start();
 	$conn=mysqli_connect($server,$user,$pass,$db);
 
 	// Get user ID
-	$sql =	"select id from account where username='$username'";
+	$sql =	"select aid from account where username='$username'";
 	$rez = $conn->query($sql);
 	$rez = $rez->fetch_assoc();
-	$userid = $rez["id"];
+	$userid = $rez["aid"];
 ?>
 
 <!DOCTYPE html>
