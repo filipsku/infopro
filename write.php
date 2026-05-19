@@ -17,7 +17,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sender = $_SESSION['username'];
     $receiver = trim($_POST['receiver']);
     $message = trim($_POST['message_text']);
-
+    $sql = conn->query("select aid from account where username=$sender")
+    $sql = $sql->fetch_assoc();
+    $senderid = $sql["aid"];
     // Validate if fields are empty
     if (empty(receiver) || empty($message)) {
         $status_message = "<p style='color: red;'>All fields are required.</p>";
@@ -26,8 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $receiverid = $receiverid->fetch_assoc();
         $receiverid = $receiverid["aid"];
         // Prepare an INSERT statement (prevents SQL Injection)
-        $stmt = $conn->prepare("INSERT INTO messages (sender, receiver, receivername, message_text) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $sender, $receiverid, $receiver,$message);
+        $stmt = $conn->prepare("INSERT INTO messages (sender, sendername, receiver, receivername, message_text) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $senderid, $sender, $receiverid, $receiver,$message);
 
         if ($stmt->execute()) {
             $status_message = "<p style='color: green;'>Message sent successfully!</p>";
