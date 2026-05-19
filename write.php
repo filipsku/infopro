@@ -22,9 +22,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty(receiver) || empty($message)) {
         $status_message = "<p style='color: red;'>All fields are required.</p>";
     } else {
+        $receiverid = $conn->query("select aid from account where username=$receiver")
+        $receiverid = $receiverid->fetch_assoc();
+        $receiverid = $receiverid["aid"];
         // Prepare an INSERT statement (prevents SQL Injection)
-        $stmt = $conn->prepare("INSERT INTO messages (sender, receiver, message_text) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $sender, $receiver, $message);
+        $stmt = $conn->prepare("INSERT INTO messages (sender, receiver, receivername, message_text) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $sender, $receiverid, $receiver,$message);
 
         if ($stmt->execute()) {
             $status_message = "<p style='color: green;'>Message sent successfully!</p>";
