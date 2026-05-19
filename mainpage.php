@@ -45,7 +45,7 @@ session_start();
 	if($rez->num_rows>0){
 		while($row=$rez->fetch_assoc()){
 			if($userid = $row["Receiver"]){
-				echo "<div class="container">".$row["Sender"]." : ".$row["Content"]."</div><br>";
+				echo "<div class="container">".$row["Sendername"]." : ".$row["Content"]."</div><br>";
 			}
 		}
 	}
@@ -61,7 +61,7 @@ session_start();
 	if($rez->num_rows>0){
 		while($row=$rez->fetch_assoc()){
 			if($userid = $row["Sender"]){
-				echo "<div class="container">".$row["Receiver"]." : ".$row["Content"]."</div><br>";
+				echo "<div class="container">".$row["Receivername"]." : ".$row["Content"]."</div><br>";
 			}
 		}
 	}
