@@ -8,7 +8,8 @@ CREATE TABLE Account(
 CREATE TABLE Message(
 	MID int AUTO_INCREMENT PRIMARY KEY,
     Sender int,
+	Sendername varchar(255),
     Receiver int,
-	ReceiverName varchar(255)
+	ReceiverName varchar(255),
     Message_text varchar(1000)
 );
