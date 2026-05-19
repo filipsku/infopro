@@ -1,4 +1,8 @@
 <?php
+session_start();
+?>
+
+<?php
 	$server="localhost";
 	$user="root";
 	$pass="";
@@ -11,17 +15,6 @@
 	$rez = $conn->query($sql);
 	$rez = $rez->fetch_assoc();
 	$userid = $rez["id"];
-
-	// Get messages for the user
-	$sql = "select * from message where receiver='$userid'";
-	$rez = $conn->query($sql);
-	if($rez->num_rows>0){
-		while($row=$rez->fetch_assoc()){
-			if($userid = $row["Receiver"]){
-				echo "<br>".$row["Sender"]." . ".$row["Content"];
-			}
-		}
-	}
 ?>
 
 <!DOCTYPE html>
@@ -38,10 +31,42 @@
         input[type="text"], input[type="email"], textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         textarea { resize: vertical; height: 150px; }
         button { background-color: #5c67f2; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; }
+		.button { background-color: #5c67f2; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; }
         button:hover { background-color: #4a54e1; }
     </style>
 </head>
 <body>
 	<h2>Welcome <?php echo $username?></h2>
-	<a href="write.php">Write a message to another user</a><br>
-	<h3>Your messages:</h3>
+	<a href="write.php" class="button">Write a message to another user</a><br>
+	<h3>Your incoming messages:</h3><br>
+	<?php   // Get messages for the user
+	$sql = "select * from message where receiver='$userid'";
+	$rez = $conn->query($sql);
+	if($rez->num_rows>0){
+		while($row=$rez->fetch_assoc()){
+			if($userid = $row["Receiver"]){
+				echo "<div class="container">".$row["Sender"]." : ".$row["Content"]."</div><br>";
+			}
+		}
+	}
+	else{
+		echo "No messages for you.";
+	}
+	?>
+
+	<h3>Your outgoing messages:</h3>
+	<?php   // Get messages for the user
+	$sql = "select * from message where sender='$userid'";
+	$rez = $conn->query($sql);
+	if($rez->num_rows>0){
+		while($row=$rez->fetch_assoc()){
+			if($userid = $row["Sender"]){
+				echo "<div class="container">".$row["Receiver"]." : ".$row["Content"]."</div><br>";
+			}
+		}
+	}
+	else{
+		echo "You sent no messages.";
+	}
+	?>
+</body>
